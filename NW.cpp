@@ -164,7 +164,7 @@ int NW::nw_align(
         }
         j = rowmax;
 
-        while( i > 0  || j > 0 )
+        while( i > 0  && j > 0 )
         {
             if (nuc[j-1]!='N'||nuc2[i-1]!='N'){    
                         if (nuc[j-1]==nuc2[i-1]){
