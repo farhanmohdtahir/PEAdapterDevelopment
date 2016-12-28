@@ -24,7 +24,7 @@ void help();
 int main(int argc, char *argv[]) 
 {
     
-	string file1 = "Breast1_R1_001.fastq", file2 = "Breast1_R2_001.fastq", seq_1, seq_2, seq_1_al, seq_2_al;
+	string file1 = "", file2 = "", seq_1, seq_2, seq_1_al, seq_2_al;
   	int opt = 0, seqLength = 0, debugLevel = 0;
   	double percentage = .0, confLevel = .0;
   	bool option = false;
