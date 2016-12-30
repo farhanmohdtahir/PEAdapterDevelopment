@@ -75,7 +75,10 @@ string Input::reform(string file, bool &fourline){
                 if (startline==true) {
                         if(line[0]=='@'){
                             if (cmpvar==0) str+=line;
-                            
+                            if (cmpvar==2) {
+                            str+="\n"+line;
+                            cmpvar=3;
+                            }           
                             else{
                             str+="\n"+line;
                             cmpvar=0;
@@ -95,7 +98,10 @@ string Input::reform(string file, bool &fourline){
                         }
                         
                         else if(line[0]=='+'){
-                            if (cmpvar==2) str+=line;
+                            if (cmpvar==2) {
+                                str+="\n"+line;
+                                cmpvar=3;
+                            }
                             else{
                             str+="\n"+line;
                             cmpvar=2;

@@ -24,7 +24,7 @@ void help();
 int main(int argc, char *argv[]) 
 {
     
-	string file1 = "", file2 = "", seq_1, seq_2, seq_1_al, seq_2_al;
+	string file1 = "fourLine1.fastq", file2 = "fourLine2.fastq", seq_1, seq_2, seq_1_al, seq_2_al;
   	int opt = 0, seqLength = 0, debugLevel = 0;
   	double percentage = .0, confLevel = .0;
   	bool option = false;
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
         }
          
         else {
-            cout << "Unable to open file"; 
+            cout << "Unable to open file"<<endl; 
             exit(0);
         }         
          
