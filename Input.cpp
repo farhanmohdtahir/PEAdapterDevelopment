@@ -16,29 +16,6 @@ using namespace std;
 	@date January 2017
  */
 
-int Input::checkNucleotide(string line, string& seq)
-{
-     	bool onlynuc = true;
-  	if(line[0]=='A'||line[0]=='C'||line[0]=='G'||line[0]=='T'||line[0]=='N')
-    	{
-		onlynuc = false;
-	 	for(int a = 0; a < line.length(); a++)
-	 	{	
-			if(line[a]=='A'||line[a]=='C'||line[a]=='G'||line[a]=='T'||line[a]=='N')
-				onlynuc = true;
-			else
-			{ 
-				onlynuc = false;
-				break;
-				}
-		}
-		if(onlynuc == true)
-		{
-			seq = line;
-		}
-   	 }
-   	 return 0;
-}    
 
 /**Reverse complement the input for sequences from the second input file.     
  * @param seq The sequence to be complemented
@@ -58,6 +35,7 @@ int Input::complementInput(string& seq)
 }
 
 //Function to reformat the multi-line FASTQ file into 4-line FASTQ file
+//@param file Input File, fourline Determine whether the multi-line FASTQ file completely transform into fourLine FASTQ file
 
 string Input::reform(string file, bool &fourline){
     bool startline=false;

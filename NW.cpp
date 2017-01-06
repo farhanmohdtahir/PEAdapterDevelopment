@@ -1,8 +1,7 @@
 #include "NW.h"
 #include <string.h>
 #include "cmath"
-//#include "emmintrin.h"
-//#include "xmmintrin.h"
+
 using namespace std;
 
 
@@ -68,11 +67,11 @@ if(L1 > Fx || L2 > Fy)
 	
 	if(debug == 2)
 	{
-//        	cout << "\nDynamic Programming Matrix: " << "\n\n";
-//        	print_matrix( F, seq_1, seq_2 );
-//
-//        	cout << "\nTraceback Matrix: " << "\n\n";
-//        	print_traceback( traceback, seq_1, seq_2, d, L1, L2 );
+        	cout << "\nDynamic Programming Matrix: " << "\n\n";
+        	print_matrix( F, seq_1, seq_2 );
+
+        	cout << "\nTraceback Matrix: " << "\n\n";
+        	print_traceback( traceback, seq_1, seq_2, d, L1, L2 );
 
 		cout << "\nAligned Sequences: " << "\n\n";
         	print_al( seq_1_al, seq_2_al );  
@@ -112,7 +111,7 @@ int NW::nw_align(
             )
 {
         int         L1 = seq_1.length();
-        int         L2 = seq_2.length(); //x = 0, y = 0, 
+        int         L2 = seq_2.length(); 
         int checkMatch=0; 
         int        fU;
         int        fD;
@@ -133,7 +132,7 @@ int NW::nw_align(
         {
                 for( j = 0; j < L1; j++ )
                 {  
-                    if (nuc[j]!='N'||nuc2[i]!='N'){    
+                    if (nuc[j]!='N'||nuc2[i]!='N'){    //Determine match or mismatch between 2 bases
                         if (nuc[j]==nuc2[i]){
                             checkMatch=a;
                         }
@@ -149,7 +148,7 @@ int NW::nw_align(
                         fD = F[ i ][ j ] + checkMatch ;
                         fL = F[ i+1 ][ j ] - d ;
                         
-                        F[ i+1 ][ j+1 ] = max(max(fU, fD),fL);
+                        F[ i+1 ][ j+1 ] = max(max(fU, fD),fL);  //finding the highest score between fU, fD and fL
 
                 }
         }
@@ -164,6 +163,7 @@ int NW::nw_align(
         }
         j = rowmax;
 
+//store traceback matrix
         while( i > 0  && j > 0 )
         {
             if (nuc[j-1]!='N'||nuc2[i-1]!='N'){    
