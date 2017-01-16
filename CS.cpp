@@ -190,14 +190,14 @@ int checkPos = 0;
 		}
 		if(biggestValue >= conf)
 			Confidence[a] = 1; 
-		
+                
 		if(checkLength == 4)
 		{
 			checkPos = a;
 		}
 		checkLength = 0;
 	}
-	
+
 	if(adapLenCount > 0)
 	{
 		if(adapterPos == checkPos)
@@ -220,7 +220,7 @@ int checkPos = 0;
 			if(Confidence[c] == 1)
 				count++;		
 		}
-	
+
 		if(count == adapterPos)
 		{
 			confTrue++;

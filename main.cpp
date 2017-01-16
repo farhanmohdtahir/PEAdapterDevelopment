@@ -24,7 +24,8 @@ void help();
 int main(int argc, char *argv[]) 
 {
     
-	string file1 = "", file2 = "", seq_1, seq_2, seq_1_al, seq_2_al;
+    
+	string file1 = "", file2 = "", seq_1, seq_2, seq_2_rev, seq_1_al, seq_2_al, dash1, dash2;
   	int opt = 0, seqLength = 0, debugLevel = 0;
   	double percentage = .0, confLevel = .0;
   	bool option = false;
@@ -146,42 +147,54 @@ int main(int argc, char *argv[])
         ifstream infile1(file1.c_str());
         ifstream infile2(file2.c_str());
         count=1;
-        
-        cout<<"Finding adapter..."<<endl;
+
+        cout<<"Finding adapter..."<<endl;    
         while (getline (infile1,line) && getline (infile2,line2))
         {
                      if(count==dnaline){
-                                
+
                         infile1>>seq_1;
                         infile2>>seq_2;
                         dnaline+=4;
                         
-// Creating NW and CS objects                    
-                    reverse( seq_2.begin(), seq_2.end() );
+// Creating NW and CS objects       
+
                     ab.complementInput(seq_2);
+                    seq_2_rev=seq_2;                                        //assign reverse-complement read 2 into variable seq_2_rev
+                    reverse( seq_2_rev.begin(), seq_2_rev.end() );          //assign reverse-complement read 2 into variable seq_2_rev
+                    
 
                     double L1 = seq_1.length();
-                    double L2 = seq_2.length();	   
+                    double L2 = seq_2_rev.length();	   
 
-                    b.nw(seq_1, seq_2, seq_1_al, seq_2_al, debugLevel);
+                    b.nw(seq_1, seq_2_rev, seq_1_al, seq_2_al, debugLevel);
 
-                    if(b.percentage > percentage && (b.rowmax/L1*100) > seqLength && ((seq_2.length()-b.colmax)/L2*100) > seqLength && b.colmax != 0)
+                    if(b.percentage > percentage && (b.rowmax/L1*100) > seqLength && ((seq_2_rev.length()-b.colmax)/L2*100) > seqLength && b.colmax != 0)
                     {
-                        if(debugLevel == 1 || debugLevel == 2)
-                        {
-                            cout<<"\nSeq1:"<<seq_1<<endl;
-                            cout<<"Seq2:"<<seq_2<<endl;
-                        }
-
+ 
                         rowmax = b.rowmax;
-                        colmax = seq_2.length()-b.colmax;                    
+                        colmax = seq_2_rev.length()-b.colmax;                   
                         c.cs(seq_1, rowmax, c1);
-                        reverse( seq_2.begin(), seq_2.end() );
                         d.cs(seq_2, colmax, c2); 
-
-                        if(debugLevel == 1 || debugLevel == 2)c.print_nucCount_phred();;
-                        if(debugLevel == 1 || debugLevel == 2)d.print_nucCount_phred();
-
+                        
+                        if(debugLevel == 1 || debugLevel == 2){
+                            dash1="";
+                            dash2="";
+                            
+                            for(int i=0; i<c1; i++){
+                                dash1+="-";
+                            }
+                            for(int i=0; i<c2; i++){
+                                dash2+="-";
+                            }                   
+                            cout<<"\nSeq1:"<<dash2<<seq_1<<endl;
+                            cout<<"Seq2:"<<seq_2_rev<<dash1<<endl;
+                        }
+                        
+                            
+                        if(debugLevel == 1 || debugLevel == 2) c.print_nucCount_phred();
+                        if(debugLevel == 1 || debugLevel == 2) d.print_nucCount_phred();
+                        
                         confTrue = 0;
                         c.checkConfidence(confLevel, confTrue, adapLenCount);
                         d.checkConfidence(confLevel, confTrue, adapLenCount);
@@ -199,7 +212,7 @@ int main(int argc, char *argv[])
                                 exit(0);
                         }	
                     }
-
+                    
                     ++bil;
         // After NW and CS
                     }
