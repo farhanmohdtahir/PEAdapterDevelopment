@@ -98,41 +98,41 @@ ___Make Sure both input FASTQ file are present in the same directory as PEAdapte
 +---------+-----------------------------------------------------------+------------+
 |         |                                                           |            |
 +---------+-----------------------------------------------------------+------------+
-|-seql    |Minimum length percentage to get adapter sequence \        |OPTIONAL    |
+|-l       |Minimum length percentage to get adapter sequence \        |OPTIONAL    |
 |         | _This parameter will set the percentage's limit of_ \     |            |          
 |         | _length of sequence alignment for both read to determine_\|            |
 |         | _whether both read contain Adapter Sequence or not._ \    |            |
-|         |(Default = 70, to change use '-seql=')\                    |            |
-|         |Example: __-seql=80__                                      |            |
+|         |(Default = 70)                        \                    |            |
+|         |Example: __-l 80__                                         |            |
 +---------+-----------------------------------------------------------+------------+
 |         |                                                           |            |
 +---------+-----------------------------------------------------------+------------+
-|-perc    |Minimum match percentage to get adapter sequence \         |OPTIONAL    |
+|-m       |Minimum match percentage to get adapter sequence \         |OPTIONAL    |
 |         | _This parameter will set the percentage's limit of_ \     |            |
 |         | _match bases between sequence alignment in read 1 and_\   |            |
 |         | _read 2 to determine whether both read contain Adapter_\  |            |
 |         | _Sequence or not._ \                                      |            |
-|         |(default = 85, to change use '-perc=')\                    |            |
-|         |Example: __-perc=90__                                      |            |
+|         |(default = 85)\                                            |            |
+|         |Example: __-m 90__                                         |            |
 +---------+-----------------------------------------------------------+------------+
 |         |                                                           |            |
 +---------+-----------------------------------------------------------+------------+
-|-conf    |Minimum confidence level of nucleotides\                   |OPTIONAL    |
+|-c       |Minimum confidence level of nucleotides\                   |OPTIONAL    |
 |         | _This parameter will set the limit of biggest phred_\     |            |
 |         | _score for each bases in the adapter sequence that_\      |            |
 |         | _allowed in order to determine the confidence level_\     |            |
 |         | _of Adapter Sequence_\                                    |            |
-|         |(default = 1, to change use '-conf=')  \                   |            |
-|         |Example: __-conf=5__                                       |            |
+|         |(default = 1)  \                                           |            |
+|         |Example: __-c 5__                                          |            |
 +---------+-----------------------------------------------------------+------------+
 |         |                                                           |            |
 +---------+-----------------------------------------------------------+------------+
-|-debug   |Debug level of programme (default = 0, to change use\      |OPTIONAL    |  
+|-d       |Debug level of programme (default = 0, to change use\      |OPTIONAL    |  
 |         |'-debug=' : \                                              |            |
 |         |0 - only adapter sequences, \                              |            |
 |         |1 - nucleotide count and phred score, \                    |            |
 |         |2 - dynamic programming matrix and traceback matrix)  \    |            |
-|         |Example: __-debug=1__ OR __-debug=2__                      |            |
+|         |Example: __-d 1__ OR __-d 2__                              |            |
 +---------+-----------------------------------------------------------+------------+
 |         |                                                           |            |
 +---------+-----------------------------------------------------------+------------+

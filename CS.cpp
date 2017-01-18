@@ -186,7 +186,7 @@ int checkPos = 0;
 			if(phred[b][a] > biggestValue)
 					biggestValue = phred[b][a];
 			}
-			else checkLength += 1; 
+			else checkLength += 1;
 		}
 		if(biggestValue >= conf)
 			Confidence[a] = 1; 
@@ -201,7 +201,7 @@ int checkPos = 0;
 	if(adapLenCount > 0)
 	{
 		if(adapterPos == checkPos)
-		adapterLength++;
+                    adapterLength++;
 		else 
 		{
 			adapterPos = checkPos;	
@@ -209,7 +209,7 @@ int checkPos = 0;
 		}
 	}
 	else adapterPos = checkPos;
-	
+
 	if(adapterLength >= 5)
 	{	
 		if(adapterPos == 0)
@@ -218,7 +218,7 @@ int checkPos = 0;
 		for(int c = 0; c < adapterPos; c++)
 		{
 			if(Confidence[c] == 1)
-				count++;		
+				count++;
 		}
 
 		if(count == adapterPos)
@@ -228,4 +228,4 @@ int checkPos = 0;
 		adapterPos = 0;
 	}
 	
-} 
+}

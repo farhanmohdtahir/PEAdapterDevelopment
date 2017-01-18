@@ -38,14 +38,14 @@ int main(int argc, char *argv[])
  	bool onlynuc2 = true;
  	
  	  static struct option long_options[] = {
-        {"help",      no_argument,       0,  'h' },
-        {"f1",    required_argument,     0,  'a' },
-        {"f2",    required_argument,     0,  'b' },
-        {"seql",  optional_argument,     0,  'c' },
-        {"perc",  optional_argument,     0,  'd' }, 
-        {"conf",  optional_argument,     0,  'e' },  
-	{"debug", optional_argument,     0,  'f' },                                
-        {0,                0,            0,   0  }
+        {"help",            no_argument,       0,  'h' },
+        {"f1",          required_argument,     0,  'a' },
+        {"f2",          required_argument,     0,  'b' },
+        {"seqLength",   required_argument,     0,  'l' },
+        {"percentage",  required_argument,     0,  'm' }, 
+        {"confLevel",   required_argument,     0,  'c' },  
+	{"debugLevel",  required_argument,     0,  'd' },                                
+        {0,                      0,            0,   0  }
     };
 
     int long_index =0;
@@ -58,26 +58,26 @@ int main(int argc, char *argv[])
                  break;
              case 'b' : file2 = optarg;option = true;
                  break;
-             case 'c' : seqLength = atoi(optarg);option = true;
+             case 'l' : seqLength = atoi(optarg);option = true;
                  break;
-             case 'd' : percentage = atoi(optarg);option = true;
+             case 'm' : percentage = atoi(optarg);option = true;
                  break;  
-             case 'e' : confLevel = atoi(optarg);option = true;
+             case 'c' : confLevel = atoi(optarg);option = true;
                  break; 
-             case 'f' : debugLevel = atoi(optarg);option = true;
+             case 'd' : debugLevel = atoi(optarg);option = true;
                  break;                                                      
              default: print_usage(); 
                  exit(EXIT_FAILURE);
         }
     }
-    
+
     if(seqLength == 0) seqLength = 70;
     if(percentage == 0) percentage = 85;
     if(confLevel == 0) confLevel = 1;
     if(debugLevel == 0) debugLevel = 0;
 
     if(option == false) print_usage();
-	if(debugLevel == 0 || debugLevel == 1 || debugLevel == 2){
+    if(debugLevel == 0 || debugLevel == 1 || debugLevel == 2){
     if(file1 != "" && file2 != "")
     {
     	Input ab;
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
         ifstream infile1(file1.c_str());
         ifstream infile2(file2.c_str());
         count=1;
-
+        
         cout<<"Finding adapter..."<<endl;    
         while (getline (infile1,line) && getline (infile2,line2))
         {
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 
                     if(b.percentage > percentage && (b.rowmax/L1*100) > seqLength && ((seq_2_rev.length()-b.colmax)/L2*100) > seqLength && b.colmax != 0)
                     {
- 
+                        
                         rowmax = b.rowmax;
                         colmax = seq_2_rev.length()-b.colmax;                   
                         c.cs(seq_1, rowmax, c1);
@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
                     ++bil;
         // After NW and CS
                     }
-
+                     
                     ++count;
                  }
   	  infile1.close();
@@ -231,19 +231,19 @@ int main(int argc, char *argv[])
 
 void print_usage() 
 {
-    cout<<"Usage: ./PEAdapterFinder -f1 filename -f2 filename -seql percentage length -perc percentage match -conf confidence level -debug debug level\n";
+    cout<<"Usage: ./PEAdapterFinder -f1 filename -f2 filename -l lengthPercentage -m matchPercentage -c confidenceLevel -d debugLevel\n";
 }
 
 void help()
 {
     cout<<"\nPaired-End Adapter Finder\n\n";
-    cout<<"Please enter ./PEAdapterFinder -f1 file1 -f2 file2 -seql seqLength -perc percentage -conf confLevel -debug debugLevel\n";
-    cout<<"\nfile1 - name of first fastq file \n";
-    cout<<"file2 - name of second fastq file\n";
-    cout<<"seqLength - minimum length percentage to get adapter sequence (default = 70, to change use '-seql=')\n";
-    cout<<"percentage - minimum match percentage to get adapter sequence (default = 85, to change use '-perc=')\n";   
-    cout<<"confLevel - minimum confidence level of nucleotides (default = 1, to change use '-conf=')\n";
-    cout<<"debugLevel - debug level of programme (default = 0, to change use '-debug=' : 0 - only adapter sequences, 1 - nucleotide count and phred score, 3 - dynamic programming matrix and traceback matrix)\n";         
+    cout<<"Please enter ./PEAdapterFinder -f1 file1 -f2 file2 -l lengthPercentage -m matchPercentage -c confidenceLevel -d debugLevel\n";
+    cout<<"\n-f1 [required argument] - name of first fastq file \n";
+    cout<<"-f2 [required argument] - name of second fastq file\n";
+    cout<<"-l  [optional argument] - minimum length percentage to get adapter sequence (default = 70)\n";
+    cout<<"-m  [optional argument] - minimum match percentage to get adapter sequence (default = 85)\n";   
+    cout<<"-c  [optional argument] - minimum confidence level of nucleotides (default = 1)\n";
+    cout<<"-d  [optional argument] - debug level of programme (default = 0 : 0 - only adapter sequences, 1 - nucleotide count and phred score, 3 - dynamic programming matrix and traceback matrix)\n";         
     cout<<"\nPlease refer to the documentation for more help...\n";
     cout<<"\nThank you. \n\n";
 }
