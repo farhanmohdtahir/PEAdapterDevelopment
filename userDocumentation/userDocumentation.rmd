@@ -122,8 +122,8 @@ ___Make Sure both input FASTQ file are present in the same directory as PEAdapte
 |         | _score for each bases in the adapter sequence that_\      |            |
 |         | _allowed in order to determine the confidence level_\     |            |
 |         | _of Adapter Sequence_\                                    |            |
-|         |(default = 1)  \                                           |            |
-|         |Example: __-c 5__                                          |            |
+|         |(default = 10) \                                           |            |
+|         |Example: __-c 20__                                         |            |
 +---------+-----------------------------------------------------------+------------+
 |         |                                                           |            |
 +---------+-----------------------------------------------------------+------------+

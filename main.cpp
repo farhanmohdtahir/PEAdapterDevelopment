@@ -31,21 +31,21 @@ int main(int argc, char *argv[])
   	bool option = false;
   	int rowmax = 0, colmax = 0, confTrue, adapLenCount = 0, iteration = 0;
   	bool skip = true, fourline1, fourline2;
-        int bil=1, count=0, idline=0, dnaline=1, adapMax1=0, adapMax2=0, c1, c2;
+        int bil=1, count=0, idline=0, dnaline=1, c1, c2, adapLen1=0, adapLen2=0;
         
  	string line, line2;
  	bool onlynuc = true;
  	bool onlynuc2 = true;
  	
  	  static struct option long_options[] = {
-        {"help",            no_argument,       0,  'h' },
-        {"f1",          required_argument,     0,  'a' },
-        {"f2",          required_argument,     0,  'b' },
-        {"seqLength",   required_argument,     0,  'l' },
-        {"percentage",  required_argument,     0,  'm' }, 
-        {"confLevel",   required_argument,     0,  'c' },  
-	{"debugLevel",  required_argument,     0,  'd' },                                
-        {0,                      0,            0,   0  }
+        {"help",                     no_argument,       0,  'h' },
+        {"f1",                   required_argument,     0,  'a' },
+        {"f2",                   required_argument,     0,  'b' },
+        {"lengthPercentage",     required_argument,     0,  'l' },
+        {"matchPercentage",      required_argument,     0,  'm' }, 
+        {"confidenceLevel",      required_argument,     0,  'c' },  
+	{"debugLevel",           required_argument,     0,  'd' },                                
+        {0,                               0,            0,   0  }
     };
 
     int long_index =0;
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
     if(seqLength == 0) seqLength = 70;
     if(percentage == 0) percentage = 85;
-    if(confLevel == 0) confLevel = 1;
+    if(confLevel == 0) confLevel = 10;
     if(debugLevel == 0) debugLevel = 0;
 
     if(option == false) print_usage();
@@ -196,18 +196,16 @@ int main(int argc, char *argv[])
                         if(debugLevel == 1 || debugLevel == 2) d.print_nucCount_phred();
                         
                         confTrue = 0;
-                        c.checkConfidence(confLevel, confTrue, adapLenCount);
-                        d.checkConfidence(confLevel, confTrue, adapLenCount);
+                        c.checkConfidence(confLevel, confTrue, adapLenCount, adapLen1);
+                        d.checkConfidence(confLevel, confTrue, adapLenCount, adapLen2);
+                        
                         adapLenCount++;                        
-                        if (c1>adapMax1) adapMax1=c1;
-                        if (c2>adapMax2) adapMax2=c2;
-
                         if(confTrue == 2)
                         {
                                 cout <<endl<<"Adapter in FASTQ file 1: ";
-                                c.print_cs(adapMax1, 0);
+                                c.print_cs(adapLen1, 0);
                                 cout <<endl<<"Adapter in FASTQ file 2: ";
-                                d.print_cs(adapMax2, 1);
+                                d.print_cs(adapLen2, 1);
                                 cout<<endl;
                                 exit(0);
                         }	
@@ -231,18 +229,18 @@ int main(int argc, char *argv[])
 
 void print_usage() 
 {
-    cout<<"Usage: ./PEAdapterFinder -f1 filename -f2 filename -l lengthPercentage -m matchPercentage -c confidenceLevel -d debugLevel\n";
+    cout<<"Usage: ./PEAdapterFinder -f1 filename1 -f2 filename2 -l lengthPercentage -m matchPercentage -c confidenceLevel -d debugLevel\n";
 }
 
 void help()
 {
     cout<<"\nPaired-End Adapter Finder\n\n";
-    cout<<"Please enter ./PEAdapterFinder -f1 file1 -f2 file2 -l lengthPercentage -m matchPercentage -c confidenceLevel -d debugLevel\n";
+    cout<<"Please enter ./PEAdapterFinder -f1 filename1 -f2 filename2 -l lengthPercentage -m matchPercentage -c confidenceLevel -d debugLevel\n";
     cout<<"\n-f1 [required argument] - name of first fastq file \n";
     cout<<"-f2 [required argument] - name of second fastq file\n";
     cout<<"-l  [optional argument] - minimum length percentage to get adapter sequence (default = 70)\n";
     cout<<"-m  [optional argument] - minimum match percentage to get adapter sequence (default = 85)\n";   
-    cout<<"-c  [optional argument] - minimum confidence level of nucleotides (default = 1)\n";
+    cout<<"-c  [optional argument] - minimum confidence level of nucleotides (default = 10)\n";
     cout<<"-d  [optional argument] - debug level of programme (default = 0 : 0 - only adapter sequences, 1 - nucleotide count and phred score, 3 - dynamic programming matrix and traceback matrix)\n";         
     cout<<"\nPlease refer to the documentation for more help...\n";
     cout<<"\nThank you. \n\n";

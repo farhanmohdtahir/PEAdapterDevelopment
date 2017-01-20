@@ -71,7 +71,7 @@ if(L1 > Fx || L2 > Fy)
         	print_matrix( F, seq_1, seq_2 );
 
         	cout << "\nTraceback Matrix: " << "\n\n";
-        	print_traceback( traceback, seq_1, seq_2, d, L1, L2 );
+        	print_traceback( traceback, seq_1, seq_2 );
 
 		cout << "\nAligned Sequences: " << "\n\n";
         	print_al( seq_1_al, seq_2_al );  
@@ -148,8 +148,8 @@ int NW::nw_align(
                         fD = F[ i ][ j ] + checkMatch ;
                         fL = F[ i+1 ][ j ] - d ;
                         
-                        F[ i+1 ][ j+1 ] = max(max(fU, fD),fL);  //finding the highest score between fU, fD and fL
-
+                        F[ i+1 ][ j+1 ] = max (fU, fD, fL, ptr) ;   //Finding the highest score and assign ptr for traceback matrix
+                        traceback[ i+1 ][ j+1 ] = ptr  ; 
                 }
         }
         
@@ -163,48 +163,30 @@ int NW::nw_align(
         }
         j = rowmax;
 
-//store traceback matrix
-        while( i > 0  && j > 0 )
+        while( i > 0  || j > 0 )
         {
-            if (nuc[j-1]!='N'||nuc2[i-1]!='N'){    
-                        if (nuc[j-1]==nuc2[i-1]){
-                            checkMatch=a;
-                        }
-                        else {
-                            checkMatch=b;
-                        }
-                    }
-                        else {
-                        checkMatch=0; 
-                        }
-            
-            if (F[i][j]==F[i-1][j]-d){
-                seq_1_al += '-' ;            
-                seq_2_al += seq_2[ i-1 ] ; 
-                i-- ;
-            }
-            
-            else if (F[i][j]==F[i-1][j-1]+checkMatch){
-                seq_1_al += seq_1[ j-1 ] ; 
-                seq_2_al += seq_2[ i-1 ] ; 
-                i-- ;  j-- ; 
-            }
-            
-            else {
-                seq_1_al += seq_1[ j-1 ] ; 
-                seq_2_al += '-' ; 
-                j--;
-            }
+                switch( traceback[ i ][ j ] )                          
+                {
+                        case '|' :      seq_1_al += '-' ;            
+                                        seq_2_al += seq_2[ i-1 ] ; 
+                                        i-- ;
+                                        break ;
+
+                        case '\\':      seq_1_al += seq_1[ j-1 ] ; 
+                                        seq_2_al += seq_2[ i-1 ] ; 
+                                        i-- ;  j-- ; 
+                                        break ;
+
+                        case '-' :      seq_1_al += seq_1[ j-1 ] ; 
+                                        seq_2_al += '-' ; 
+                                        j-- ;
+                }
 	
 		if(j==0 )
 		{
 			colmax = i;
 			break;						
 		}
-            
-            if(i==0){
-                break;
-            }
         }
 
 
@@ -214,6 +196,27 @@ int NW::nw_align(
         reverse( seq_2_al.begin(), seq_2_al.end() );
 
         return  0 ;
+}
+
+inline int  NW::max( int f1, int f2, int f3, char & ptr )     
+{                                                      
+        int  max = 0;                            
+
+        if (f2>=f1 && f2>=f3){
+            max=f2;
+            ptr='\\';
+        }
+        else if (f1>f3){
+            max=f1;
+            ptr='|';
+        }
+        else{
+        max=f3;
+        ptr='-';
+        }
+        
+        return max;
+
 }
 
 void  NW::print_matrix( int ** F, string seq_1, string seq_2 )
@@ -243,67 +246,30 @@ void  NW::print_matrix( int ** F, string seq_1, string seq_2 )
         }
 }
 
-void  NW::print_traceback( char ** traceback, string seq_1, string seq_2, int d, int L1, int L2 )
+void  NW::print_traceback( char ** traceback, string seq_1, string seq_2 )
 {
-    int checkMatch;
-    char nuc[L1], nuc2[L2] ;
-    const int  a = 2, b= -1;   
-    
-    strncpy(nuc, seq_1.c_str(), sizeof(nuc));
-    strncpy(nuc2, seq_2.c_str(), sizeof(nuc2));
-        
+        int  L1 = seq_1.length();
+        int  L2 = seq_2.length();
+
         cout << "    ";
-        
         for( int j = 0; j < L1; j++ )
         {
                 cout << seq_1[ j ] << " ";
         }
-        cout << endl<< "  ";
-        
-        for( int i = 0; i <=L2 ; i++ )
+        cout << "\n  ";
+
+        for( int i = 0; i <= L2; i++ )
         {
                 if( i > 0 )
                 {
                         cout << seq_2[ i-1 ] << " ";
                 }
-                
-                for(int j=0; j<=L1; j++){
-
-                    if (i==0 || j==0){
-                        cout<<traceback[i][j]<<" ";
-                    }
-                    
-                    else{
-                    
-                    if (nuc[j-1]!='N'||nuc2[i-1]!='N'){    
-                            if (nuc[j-1]==nuc2[i-1]){
-                                checkMatch=a;
-                            }
-                            else {
-                                checkMatch=b;
-                            }
-                        }
-                            else {
-                            checkMatch=0; 
-                            }
-
-                    if (F[i][j]==F[i-1][j-1]+checkMatch){
-                        cout<<'\\'<<" ";
-                    }
-                    
-                    else if (F[i][j]==F[i-1][j]-d){
-                        cout<<'|'<< " ";
-                    }
-
-
-                    else {
-                        cout<<'-'<<" ";
-                    }
+                for( int j = 0; j <= L1; j++ )
+                {
+                        cout << traceback[ i ][ j ] << " ";
                 }
-                    
-              }
-              cout<<endl;
-            }
+                cout << endl;
+        }
 }
 
 void  NW::print_al( string& seq_1_al, string& seq_2_al )

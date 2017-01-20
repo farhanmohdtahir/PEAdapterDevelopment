@@ -9,8 +9,8 @@
 
 	The Consensus Sequence for both Read 1 and Read 2 adapters are determined based on the traceback of the dynamic programming algorithm. The Consensus Sequence is searched based on how well Read 1 and Read 2 align to each other. The ends of Read 1 and Read 2 which do not align form adapters and are added to the nucleotide count. The final Consensus Sequence is based on the nucleotide count.
 	
-	@author Rayan Gan
-	@date April 2015
+	@author Rayan Gan and Farhan Tahir
+	@date Jan 2017
  */
 using namespace std;
 class CS
@@ -22,8 +22,6 @@ private:
 	double phred [4][20];			/**< 2D-array of Phred score of each nucleotide in the first adapter. */
 	char consensus[20]; 			/**< Consensus sequence of first adapter. */
 	int Confidence[20];
-	int adapterLength;
-	int adapterPos;	
 	int addPrior;
 
 public:
@@ -46,7 +44,7 @@ public:
 	 * @param conf Confidence level
 	 * @param confTrue Does the sequence meet the confidence level?	 
 	 */
-	void checkConfidence(double conf, int& confTrue, int adapLenCount);
+	void checkConfidence(double conf, int& confTrue, int adapLenCount, int &adapLen);
 	CS(); 
 };
 

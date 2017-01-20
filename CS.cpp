@@ -13,8 +13,6 @@ CS::CS()
 	memset(nucleotidecount,0,sizeof(nucleotidecount));
 	memset(phred,0,sizeof(phred));
 	memset(consensus,0,sizeof(consensus));
-	adapterLength = 0;
-	adapterPos = 0;
 	addPrior = 0;
 }
 
@@ -169,63 +167,50 @@ void CS::print_cs(int c, int opt = 0)
         }
 }
 
-void CS::checkConfidence(double conf, int& confTrue, int adapLenCount)
-{
-	int checkLength = 0;
-int checkPos = 0;
+void CS::checkConfidence(double conf, int& confTrue, int adapLenCount, int &adapLen)
+{       
+        double biggestValue[20];
+
+        for (int i=0; i<20; i++){
+            biggestValue[i]=0;
+        }
 
 	for(int a = 0; a < 20; a++)
 	{
 		Confidence[a]=0;
 		bool highConf = false;
-		double biggestValue = 0;
 		for(int b = 0; b < 4; b++)
 		{
-			if(phred[b][a] != 0)
-			{
-			if(phred[b][a] > biggestValue)
-					biggestValue = phred[b][a];
-			}
-			else checkLength += 1;
+
+			if(phred[b][a] > biggestValue[a])
+					biggestValue[a] = phred[b][a];       
 		}
-		if(biggestValue >= conf)
-			Confidence[a] = 1; 
                 
-		if(checkLength == 4)
-		{
-			checkPos = a;
-		}
-		checkLength = 0;
+		if(biggestValue[a] >= conf)
+			Confidence[a] = 1; 
 	}
+        
+        if (adapLenCount==100){
+            for (int i=0; i<20; i++){
+                if (biggestValue[i]>=10) adapLen+=1;
+                else break;
+            }
 
-	if(adapLenCount > 0)
-	{
-		if(adapterPos == checkPos)
-                    adapterLength++;
-		else 
-		{
-			adapterPos = checkPos;	
-			adapterLength = 0;
-		}
-	}
-	else adapterPos = checkPos;
-
-	if(adapterLength >= 5)
+        }
+ 
+	if(adapLenCount >= 100)
 	{	
-		if(adapterPos == 0)
-			adapterPos = 20;
 		int count = 0;  
-		for(int c = 0; c < adapterPos; c++)
+		for(int c = 0; c < adapLen; c++)
 		{
 			if(Confidence[c] == 1)
 				count++;
 		}
 
-		if(count == adapterPos)
+		if(count == adapLen)
 		{
 			confTrue++;
 		}
-		adapterPos = 0;
 	}
 	
 }
