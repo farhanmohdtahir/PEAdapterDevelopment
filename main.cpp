@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                  break; 
              case 'd' : debugLevel = atoi(optarg);option = true;
                  break;                                                      
-             default: print_usage(); 
+             default: help(); 
                  exit(EXIT_FAILURE);
         }
     }
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     if(confLevel == 0) confLevel = 10;
     if(debugLevel == 0) debugLevel = 0;
 
-    if(option == false) print_usage();
+    if(option == false) help();
     if(debugLevel == 0 || debugLevel == 1 || debugLevel == 2){
     if(file1 != "" && file2 != "")
     {
